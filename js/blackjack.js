@@ -1,6 +1,7 @@
 let stage;
 let dlrHand = [];
 let plrHand = [];
+let arrRemoved = [];
 let hitClicked = false;
 
 let hitButton = document.getElementById("hitButton");
@@ -171,6 +172,13 @@ function dealerHand() {
 
 function playerHand(waitTime1, waitTime2) {
 
+    if (hitClicked) {
+        arrRemoved.forEach((el) => {
+            removePlayerCard(el);
+        });
+        arrRemoved.length = 0;
+    }
+
     for (let i = 0; i < 2; i++)
     {
         let x = cardRandomizer();
@@ -203,15 +211,10 @@ function playerHand(waitTime1, waitTime2) {
 
     createjs.Tween.get(plrBitmap2, {override:true}).wait(waitTime2).to({x:500, y: 300}, 1000);
 
+    arrRemoved.push(plrBitmap1);
+    arrRemoved.push(plrBitmap2);
 
     plrHand.length = 0;
-
-    if (hitClicked) {
-        let arrRemoved = [plrBitmap1, plrBitmap2];
-        arrRemoved.forEach((el) => {
-            removePlayerCard(el);
-        });
-    }
 }
 
 function removePlayerCard(objCard) {
@@ -221,4 +224,3 @@ function removePlayerCard(objCard) {
 function cardRandomizer() {
     return cardArr.splice(Math.floor(Math.random() * cardArr.length), 1);
 }
-
