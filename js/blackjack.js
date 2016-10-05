@@ -1,12 +1,18 @@
 let stage;
 let dlrHand = [];
 let plrHand = [];
+let hitClicked = false;
 
+let hitButton = document.getElementById("hitButton");
+hitButton.addEventListener("click", () => {
+    hitClicked = true;
+    playerHand(1000, 2000);
+});
 
 window.addEventListener('resize', resize, false);
 
 function init() {
-    stage = new createjs.Stage("screen-view");
+    stage = new createjs.Stage("screenView");
     let that = this;
     createjs.Ticker.addEventListener("tick", function () {
         that.tick();
@@ -15,9 +21,8 @@ function init() {
     resize();
 
     dealerHand();
-    playerHand();
+    playerHand(4000, 5000);
     deckDraw();
-
 }
 
 function tick() {
@@ -121,12 +126,12 @@ function dealerHand() {
 
     for (let i = 0; i < 3; i++)
     {
-        let x = cardArr.splice(Math.floor(Math.random() * cardArr.length), 1);
+        let x = cardRandomizer();
         dlrHand.push(x[0]);
     }
 
-    dlrHand[0].x = 200;
-    dlrHand[0].y = 35;
+    dlrHand[0].x = 800;
+    dlrHand[0].y = 80;
 
     let card1 = new Image();
     card1.src = dlrHand[0].image;
@@ -135,10 +140,11 @@ function dealerHand() {
     bitmap1.y = dlrHand[0].y;
     stage.addChild(bitmap1);
 
+    createjs.Tween.get(bitmap1, {override:true}).wait(1000).to({x:200, y: 35}, 1000);
 
     let cardObject2 = dlrHand[1];
-    cardObject2.x = 400;
-    cardObject2.y = 35;
+    cardObject2.x = 800;
+    cardObject2.y = 80;
 
     let card2 = new Image();
     card2.src = cardObject2.image;
@@ -147,9 +153,11 @@ function dealerHand() {
     bitmap2.y = cardObject2.y;
     stage.addChild(bitmap2);
 
+    createjs.Tween.get(bitmap2, {override:true}).wait(2000).to({x:400, y: 35}, 1000);
+
     let cardObject3 = dlrHand[2];
-    cardObject3.x = 600;
-    cardObject3.y = 35;
+    cardObject3.x = 800;
+    cardObject3.y = 80;
 
     let card3 = new Image();
     card3.src = cardObject3.image;
@@ -157,19 +165,21 @@ function dealerHand() {
     bitmap3.x = cardObject3.x;
     bitmap3.y = cardObject3.y;
     stage.addChild(bitmap3);
+
+    createjs.Tween.get(bitmap3, {override:true}).wait(3000).to({x:600, y: 35}, 1000);
 }
 
-function playerHand() {
+function playerHand(waitTime1, waitTime2) {
 
     for (let i = 0; i < 2; i++)
     {
-        let x = cardArr.splice(Math.floor(Math.random() * cardArr.length), 1);
+        let x = cardRandomizer();
         plrHand.push(x[0]);
     }
 
     let plrCardObject1 = plrHand[0];
-    plrCardObject1.x = 300;
-    plrCardObject1.y = 300;
+    plrCardObject1.x = 800;
+    plrCardObject1.y = 80;
     
     let plrCard1 = new Image();
     plrCard1.src = plrCardObject1.image;
@@ -178,9 +188,11 @@ function playerHand() {
     plrBitmap1.y = plrCardObject1.y;
     stage.addChild(plrBitmap1);
 
+    createjs.Tween.get(plrBitmap1, {override:true}).wait(waitTime1).to({x:300, y: 300}, 1000);
+
     let plrCardObject2 = plrHand[1];
-    plrCardObject2.x = 500;
-    plrCardObject2.y = 300;
+    plrCardObject2.x = 800;
+    plrCardObject2.y = 80;
 
     let plrCard2 = new Image();
     plrCard2.src = plrCardObject2.image;
@@ -189,9 +201,24 @@ function playerHand() {
     plrBitmap2.y = plrCardObject2.y;
     stage.addChild(plrBitmap2);
 
+    createjs.Tween.get(plrBitmap2, {override:true}).wait(waitTime2).to({x:500, y: 300}, 1000);
+
+
+    plrHand.length = 0;
+
+    if (hitClicked) {
+        let arrRemoved = [plrBitmap1, plrBitmap2];
+        arrRemoved.forEach((el) => {
+            removePlayerCard(el);
+        });
+    }
+}
+
+function removePlayerCard(objCard) {
+    createjs.Tween.get(objCard).to({alpha:0, visible:false}, 1000);
 }
 
 function cardRandomizer() {
-    return cardArr[Math.floor(Math.random() * cardArr.length)];
+    return cardArr.splice(Math.floor(Math.random() * cardArr.length), 1);
 }
 

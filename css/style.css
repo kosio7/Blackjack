@@ -4,7 +4,10 @@ body, html {
     overflow: hidden;
 }
 
-#screen-view {
+#screenView {
     background-color: green;
 }
 
+#hitButton {
+    margin-top: -100px;
+}
