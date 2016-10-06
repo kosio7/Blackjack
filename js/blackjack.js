@@ -4,6 +4,7 @@ let plrHand = [];
 let arrRemoved = [];
 let hitClicked = false;
 
+
 let hitButton = document.getElementById("hitButton");
 hitButton.addEventListener("click", () => {
     hitClicked = true;
@@ -24,6 +25,7 @@ function init() {
     dealerHand();
     playerHand(4000, 5000);
     deckDraw();
+
 }
 
 function tick() {
@@ -195,6 +197,8 @@ function playerHand(waitTime1, waitTime2) {
     plrBitmap1.x = plrCardObject1.x;
     plrBitmap1.y = plrCardObject1.y;
     stage.addChild(plrBitmap1);
+
+    plrBitmap1.addEventListener('click', playerHand, false);
 
     createjs.Tween.get(plrBitmap1, {override:true}).wait(waitTime1).to({x:300, y: 300}, 1000);
 
