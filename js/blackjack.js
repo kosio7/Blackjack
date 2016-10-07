@@ -3,7 +3,7 @@ let dlrHand = [];
 let plrHand = [];
 let arrRemoved = [];
 let hitClicked = false;
-let soundID;
+let soundID = 'music';
 
 let hitButton = document.getElementById("hitButton");
 hitButton.addEventListener("click", () => {
@@ -20,22 +20,24 @@ function init() {
         that.tick();
     });
 
-    // playSound();
     dealerHand();
     playerHand("both", 1000, 1000);
     deckDraw();
 
     resize();
 
+    loadSound();
 }
 
-// function loadSound () {
-//     createjs.Sound.registerSound("sounds/POL-casino-short.mp3", soundID);
-// }
-//
-// function playSound () {
-//     createjs.Sound.play(soundID);
-// }
+
+function loadSound () {
+    createjs.Sound.addEventListener("fileload", playSound);
+    createjs.Sound.registerSound("sounds/POL-casino-short.mp3", soundID);
+}
+
+function playSound () {
+    createjs.Sound.play(soundID, {loop: -1});
+}
 
 
 function tick() {
