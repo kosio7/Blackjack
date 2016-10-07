@@ -3,12 +3,12 @@ let dlrHand = [];
 let plrHand = [];
 let arrRemoved = [];
 let hitClicked = false;
-
+let soundID;
 
 let hitButton = document.getElementById("hitButton");
 hitButton.addEventListener("click", () => {
     hitClicked = true;
-    playerHand(1000, 2000);
+    playerHand('both', 100, 200);
 });
 
 window.addEventListener('resize', resize, false);
@@ -20,13 +20,23 @@ function init() {
         that.tick();
     });
 
-    resize();
-
+    // playSound();
     dealerHand();
-    playerHand(4000, 5000);
+    playerHand("both", 1000, 1000);
     deckDraw();
 
+    resize();
+
 }
+
+// function loadSound () {
+//     createjs.Sound.registerSound("sounds/POL-casino-short.mp3", soundID);
+// }
+//
+// function playSound () {
+//     createjs.Sound.play(soundID);
+// }
+
 
 function tick() {
     stage.update();
@@ -123,6 +133,26 @@ function deckDraw() {
         bitmapC.y = 80;
         stage.addChild(bitmapC);
     }
+    let cards = new Image();
+    cards.src = "images/back.png";
+    let bitmapC = new createjs.Bitmap(cards);
+    bitmapC.x = 800;
+    bitmapC.y = 80;
+    stage.addChild(bitmapC);
+
+    let cards1 = new Image();
+    cards1.src = "images/back.png";
+    let bitmapC1 = new createjs.Bitmap(cards1);
+    bitmapC1.x = 805;
+    bitmapC1.y = 80;
+    stage.addChild(bitmapC1);
+
+    let cards2 = new Image();
+    cards2.src = "images/back.png";
+    let bitmapC2 = new createjs.Bitmap(cards2);
+    bitmapC2.x = 810;
+    bitmapC2.y = 80;
+    stage.addChild(bitmapC2);
 }
 
 function dealerHand() {
@@ -143,38 +173,57 @@ function dealerHand() {
     bitmap1.y = dlrHand[0].y;
     stage.addChild(bitmap1);
 
-    createjs.Tween.get(bitmap1, {override:true}).wait(1000).to({x:200, y: 35}, 1000);
+    createjs.Tween.get(bitmap1, {override:true}).wait(1000).to({x:200, y: 35}, 200);
 
-    let cardObject2 = dlrHand[1];
-    cardObject2.x = 800;
-    cardObject2.y = 80;
+    dlrHand[1].x = 800;
+    dlrHand[1].y = 80;
 
     let card2 = new Image();
-    card2.src = cardObject2.image;
+    card2.src = dlrHand[1].image;
     let bitmap2 = new createjs.Bitmap(card2);
-    bitmap2.x = cardObject2.x;
-    bitmap2.y = cardObject2.y;
+    bitmap2.x = dlrHand[1].x;
+    bitmap2.y = dlrHand[1].y;
     stage.addChild(bitmap2);
 
-    createjs.Tween.get(bitmap2, {override:true}).wait(2000).to({x:400, y: 35}, 1000);
+    createjs.Tween.get(bitmap2, {override:true}).wait(1000).to({x:400, y: 35}, 100);
 
-    let cardObject3 = dlrHand[2];
-    cardObject3.x = 800;
-    cardObject3.y = 80;
+    dlrHand[2].x = 800;
+    dlrHand[2].y = 80;
 
     let card3 = new Image();
-    card3.src = cardObject3.image;
+    card3.src = dlrHand[2].image;
     let bitmap3 = new createjs.Bitmap(card3);
-    bitmap3.x = cardObject3.x;
-    bitmap3.y = cardObject3.y;
+    bitmap3.x = dlrHand[2].x;
+    bitmap3.y = dlrHand[2].y;
     stage.addChild(bitmap3);
 
-    createjs.Tween.get(bitmap3, {override:true}).wait(3000).to({x:600, y: 35}, 1000);
+    createjs.Tween.get(bitmap3, {override:true}).wait(1000).to({x:600, y: 35}, 100);
 }
 
-function playerHand(waitTime1, waitTime2) {
+function drawCard(objCard, waitTime, objPosition) {
+    let plrCardObject = objCard;
+    plrCardObject.x = objPosition.startX;
+    plrCardObject.y = objPosition.startY;
 
-    if (hitClicked) {
+    let plrCard = new Image();
+    plrCard.src = plrCardObject.image;
+    let plrBitmap = new createjs.Bitmap(plrCard);
+    plrBitmap.x = plrCardObject.x;
+    plrBitmap.y = plrCardObject.y;
+    stage.addChild(plrBitmap);
+
+    plrBitmap.addEventListener('click', () => {
+        removePlayerCard(plrBitmap);
+        playerHand(objPosition.cardPos, 100, 200);
+    }, false);
+
+    createjs.Tween.get(plrBitmap, {override:true}).wait(waitTime).to({ x: objPosition.endX, y: objPosition.endY }, 200);
+
+    return plrBitmap;
+}
+
+function playerHand(whichCard, waitTimeCardA, waitTimeCardB) {
+    if (hitClicked && whichCard === 'both') {
         arrRemoved.forEach((el) => {
             removePlayerCard(el);
         });
@@ -186,43 +235,26 @@ function playerHand(waitTime1, waitTime2) {
         let x = cardRandomizer();
         plrHand.push(x[0]);
     }
-
-    let plrCardObject1 = plrHand[0];
-    plrCardObject1.x = 800;
-    plrCardObject1.y = 80;
     
-    let plrCard1 = new Image();
-    plrCard1.src = plrCardObject1.image;
-    let plrBitmap1 = new createjs.Bitmap(plrCard1);
-    plrBitmap1.x = plrCardObject1.x;
-    plrBitmap1.y = plrCardObject1.y;
-    stage.addChild(plrBitmap1);
+    let cardA = {};
+    let cardB = {};
+    if (whichCard === 'both') {
+        cardA = drawCard(plrHand[0], waitTimeCardA, { startX: 800, startY: 80, endX: 300, endY: 300, cardPos: 'left' });
+        cardB = drawCard(plrHand[1], waitTimeCardB, { startX: 800, startY: 80, endX: 500, endY: 300, cardPos: 'right' });
+    } else if (whichCard === 'left') {
+        cardA = drawCard(plrHand[0], waitTimeCardA, { startX: 800, startY: 80, endX: 300, endY: 300, cardPos: 'left' });
+    } else {
+        cardA = drawCard(plrHand[0], waitTimeCardA, { startX: 800, startY: 80, endX: 500, endY: 300, cardPos: 'right' });
+    }
 
-    plrBitmap1.addEventListener('click', playerHand, false);
-
-    createjs.Tween.get(plrBitmap1, {override:true}).wait(waitTime1).to({x:300, y: 300}, 1000);
-
-    let plrCardObject2 = plrHand[1];
-    plrCardObject2.x = 800;
-    plrCardObject2.y = 80;
-
-    let plrCard2 = new Image();
-    plrCard2.src = plrCardObject2.image;
-    let plrBitmap2 = new createjs.Bitmap(plrCard2);
-    plrBitmap2.x = plrCardObject2.x;
-    plrBitmap2.y = plrCardObject2.y;
-    stage.addChild(plrBitmap2);
-
-    createjs.Tween.get(plrBitmap2, {override:true}).wait(waitTime2).to({x:500, y: 300}, 1000);
-
-    arrRemoved.push(plrBitmap1);
-    arrRemoved.push(plrBitmap2);
+    arrRemoved.push(cardA);
+    arrRemoved.push(cardB);
 
     plrHand.length = 0;
 }
 
 function removePlayerCard(objCard) {
-    createjs.Tween.get(objCard).to({alpha:0, visible:false}, 1000);
+    createjs.Tween.get(objCard).to({x: 20, y: 520, alpha:0, visible: false}, 200);
 }
 
 function cardRandomizer() {
