@@ -8,7 +8,7 @@ let soundID = 'music';
 let hitButton = document.getElementById("hitButton");
 hitButton.addEventListener("click", () => {
     hitClicked = true;
-    playerHand('both', 100, 200);
+    playerHand('both', 500, 400);
 });
 
 window.addEventListener('resize', resize, false);
@@ -21,7 +21,7 @@ function init() {
     });
 
     dealerHand();
-    playerHand("both", 1000, 1000);
+    playerHand("both", 2000, 2500);
     deckDraw();
 
     resize();
@@ -38,7 +38,6 @@ function loadSound () {
 function playSound () {
     createjs.Sound.play(soundID, {loop: -1});
 }
-
 
 function tick() {
     stage.update();
@@ -155,6 +154,8 @@ function deckDraw() {
     bitmapC2.x = 810;
     bitmapC2.y = 80;
     stage.addChild(bitmapC2);
+
+    bitmapC2.shadow = new createjs.Shadow("#000000", 5, 5, 10);
 }
 
 function dealerHand() {
@@ -175,7 +176,9 @@ function dealerHand() {
     bitmap1.y = dlrHand[0].y;
     stage.addChild(bitmap1);
 
-    createjs.Tween.get(bitmap1, {override:true}).wait(1000).to({x:200, y: 35}, 200);
+    bitmap1.shadow = new createjs.Shadow("#000000", 5, 5, 10);
+
+    createjs.Tween.get(bitmap1, {override:true}).wait(500).to({x:200, y: 35}, 700);
 
     dlrHand[1].x = 800;
     dlrHand[1].y = 80;
@@ -187,7 +190,9 @@ function dealerHand() {
     bitmap2.y = dlrHand[1].y;
     stage.addChild(bitmap2);
 
-    createjs.Tween.get(bitmap2, {override:true}).wait(1000).to({x:400, y: 35}, 100);
+    bitmap2.shadow = new createjs.Shadow("#000000", 5, 5, 10);
+
+    createjs.Tween.get(bitmap2, {override:true}).wait(1000).to({x:400, y: 35}, 600);
 
     dlrHand[2].x = 800;
     dlrHand[2].y = 80;
@@ -199,7 +204,9 @@ function dealerHand() {
     bitmap3.y = dlrHand[2].y;
     stage.addChild(bitmap3);
 
-    createjs.Tween.get(bitmap3, {override:true}).wait(1000).to({x:600, y: 35}, 100);
+    bitmap3.shadow = new createjs.Shadow("#000000", 5, 5, 10);
+
+    createjs.Tween.get(bitmap3, {override:true}).wait(1500).to({x:600, y: 35}, 500);
 }
 
 function drawCard(objCard, waitTime, objPosition) {
@@ -214,9 +221,11 @@ function drawCard(objCard, waitTime, objPosition) {
     plrBitmap.y = plrCardObject.y;
     stage.addChild(plrBitmap);
 
+    plrBitmap.shadow = new createjs.Shadow("#000000", 5, 5, 10);
+
     plrBitmap.addEventListener('click', () => {
         removePlayerCard(plrBitmap);
-        playerHand(objPosition.cardPos, 100, 200);
+        playerHand(objPosition.cardPos, 600, 500);
     }, false);
 
     createjs.Tween.get(plrBitmap, {override:true}).wait(waitTime).to({ x: objPosition.endX, y: objPosition.endY }, 200);
