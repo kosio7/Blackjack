@@ -5,7 +5,7 @@ let arrRemoved = [];
 let hitClicked = false;
 let soundID = 'draw';
 
-//Contains all card objects. Deck images created by http://byronknoll.blogspot.bg/2011/03/vector-playing-cards.html
+// Contains all card objects. Deck images created by http://byronknoll.blogspot.bg/2011/03/vector-playing-cards.html
 let cardArr = [
     {
         image: "images/ace1.png",
@@ -337,6 +337,9 @@ const playSound = () => {
     createjs.Sound.play(soundID, {delay: 2200});
 };
 
+/**
+ * This function is for automatically calling the stage update.
+ */
 const tick = () => {
     stage.update();
 };
@@ -377,6 +380,9 @@ const deckDraw = () => {
     bitmapC2.shadow = new createjs.Shadow("#000000", 5, 5, 10);
 };
 
+/**
+ * This function draws the first three cards which are in the dealer's hand.
+ */
 const dealerHand = () => {
     for (let i = 0; i < 3; i++)
     {
@@ -530,6 +536,7 @@ const resize = () => {
 };
 
 let hitButton = document.getElementById("hitButton");
+// Listener for the hit button. When triggered it draws 2 new cards from the deck to the player's hand.
 hitButton.addEventListener("click", () => {
     hitClicked = true;
     if (typeof cardArr !== "undefined" && cardArr.length > 0) {
@@ -550,6 +557,9 @@ hitButton.addEventListener("click", () => {
 
 window.addEventListener('resize', resize, false);
 
+/**
+ * This function is called on load. It is the main game function.
+ */
 let init = () => {
     stage = new createjs.Stage("screenView");
     createjs.Ticker.addEventListener("tick", () => {
