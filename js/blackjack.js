@@ -4,20 +4,43 @@ let plrHand = [];
 let arrRemoved = [];
 let hitClicked = false;
 let soundID = 'music';
+let init = () => {};
+let loadSound = () => {};
+let playSound = () => {};
+let tick = () => {};
+let deckDraw = () => {};
+let dealerHand = () => {};
+let drawCard = () => {};
+let playerHand = () => {};
+let removePlayerCard = () => {};
+let cardRandomizer = () => {};
+let resize = () => {};
 
 let hitButton = document.getElementById("hitButton");
 hitButton.addEventListener("click", () => {
     hitClicked = true;
-    playerHand('both', 500, 400);
+    if (typeof cardArr !== "undefined" && cardArr.length > 0) {
+        playerHand('both', 500, 400);
+        createjs.Sound.play(soundID, {delay: 250});
+        createjs.Sound.play(soundID, {delay: 450});
+    } else {
+        let txt = new createjs.Text();
+        txt.x = 400;
+        txt.y = 550;
+        txt.font = "bold 96px Indie Flower";
+        txt.color = "#000000";
+        txt.text = "Game Over!";
+        stage.addChild(txt);
+        txt.shadow = new createjs.Shadow("#000000", 5, 5, 10);
+    }
 });
 
 window.addEventListener('resize', resize, false);
 
-function init() {
+init = () => {
     stage = new createjs.Stage("screenView");
-    let that = this;
-    createjs.Ticker.addEventListener("tick", function () {
-        that.tick();
+    createjs.Ticker.addEventListener("tick", () => {
+        tick();
     });
 
     dealerHand();
@@ -27,28 +50,33 @@ function init() {
     resize();
 
     loadSound();
-}
+};
 
+//The next 2 functions are for the card drawing sound using the SoundJS library.
 
-function loadSound () {
+loadSound = () => {
     createjs.Sound.addEventListener("fileload", playSound);
-    createjs.Sound.registerSound("sounds/POL-casino-short.mp3", soundID);
-}
+    createjs.Sound.registerSound("sounds/draw.wav", soundID);
+};
 
-function playSound () {
-    createjs.Sound.play(soundID, {loop: -1});
-}
+playSound = () => {
+    createjs.Sound.play(soundID, {delay: 150});
+    createjs.Sound.play(soundID, {delay: 800});
+    createjs.Sound.play(soundID, {delay: 1200});
+    createjs.Sound.play(soundID, {delay: 1700});
+    createjs.Sound.play(soundID, {delay: 2200});
+};
 
-function tick() {
+tick = () => {
     stage.update();
-}
+};
 
-function resize() {
+resize = () => {                          //This function can be used for scaling contents on different screen sizes.
     stage.canvas.width = window.innerWidth;
     stage.canvas.height = window.innerHeight;
-}
+};
 
-/* Deck images created by http://byronknoll.blogspot.bg/2011/03/vector-playing-cards.html*/
+//Deck images created by http://byronknoll.blogspot.bg/2011/03/vector-playing-cards.html
 
 let cardArr = [
     {
@@ -122,10 +150,250 @@ let cardArr = [
         id: "three4",
         x: 0,
         y: 0
+    },
+    {
+        image: "images/four1.png",
+        id: "four1",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/four2.png",
+        id: "four2",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/four3.png",
+        id: "four3",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/four4.png",
+        id: "four4",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/five1.png",
+        id: "five1",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/five2.png",
+        id: "five2",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/five3.png",
+        id: "five3",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/five4.png",
+        id: "five4",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/six1.png",
+        id: "six1",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/six2.png",
+        id: "six2",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/six3.png",
+        id: "six3",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/six4.png",
+        id: "six4",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/seven1.png",
+        id: "seven1",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/seven2.png",
+        id: "seven2",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/seven3.png",
+        id: "seven3",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/seven4.png",
+        id: "seven4",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/eight1.png",
+        id: "eight1",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/eight2.png",
+        id: "eight2",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/eight3.png",
+        id: "eight3",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/eight4.png",
+        id: "eight4",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/nine1.png",
+        id: "nine1",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/nine2.png",
+        id: "nine2",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/nine3.png",
+        id: "nine3",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/nine4.png",
+        id: "nine4",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/ten1.png",
+        id: "ten1",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/ten2.png",
+        id: "ten2",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/ten3.png",
+        id: "ten3",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/ten4.png",
+        id: "ten4",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/jack1.png",
+        id: "jack1",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/jack2.png",
+        id: "jack2",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/jack3.png",
+        id: "jack3",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/jack4.png",
+        id: "jack4",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/queen1.png",
+        id: "queen1",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/queen2.png",
+        id: "queen2",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/queen3.png",
+        id: "queen3",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/queen4.png",
+        id: "queen4",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/king1.png",
+        id: "king1",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/king2.png",
+        id: "king2",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/king3.png",
+        id: "king3",
+        x: 0,
+        y: 0
+    },
+    {
+        image: "images/king4.png",
+        id: "king4",
+        x: 0,
+        y: 0
     }
 ];
 
-function deckDraw() {
+deckDraw = () => {
     for (let i = 0; i <= cardArr.length - 1; i++) {
         let cards = new Image();
         cards.src = cardArr[i].image;
@@ -156,9 +424,9 @@ function deckDraw() {
     stage.addChild(bitmapC2);
 
     bitmapC2.shadow = new createjs.Shadow("#000000", 5, 5, 10);
-}
+};
 
-function dealerHand() {
+dealerHand = () => {
 
     for (let i = 0; i < 3; i++)
     {
@@ -178,7 +446,7 @@ function dealerHand() {
 
     bitmap1.shadow = new createjs.Shadow("#000000", 5, 5, 10);
 
-    createjs.Tween.get(bitmap1, {override:true}).wait(500).to({x:200, y: 35}, 700);
+    createjs.Tween.get(bitmap1, {override:true}).wait(500).to({x:200, y: 35}, 600);
 
     dlrHand[1].x = 800;
     dlrHand[1].y = 80;
@@ -192,7 +460,7 @@ function dealerHand() {
 
     bitmap2.shadow = new createjs.Shadow("#000000", 5, 5, 10);
 
-    createjs.Tween.get(bitmap2, {override:true}).wait(1000).to({x:400, y: 35}, 600);
+    createjs.Tween.get(bitmap2, {override:true}).wait(1000).to({x:400, y: 35}, 500);
 
     dlrHand[2].x = 800;
     dlrHand[2].y = 80;
@@ -206,10 +474,10 @@ function dealerHand() {
 
     bitmap3.shadow = new createjs.Shadow("#000000", 5, 5, 10);
 
-    createjs.Tween.get(bitmap3, {override:true}).wait(1500).to({x:600, y: 35}, 500);
-}
+    createjs.Tween.get(bitmap3, {override:true}).wait(1500).to({x:600, y: 35}, 400);
+};
 
-function drawCard(objCard, waitTime, objPosition) {
+drawCard = (objCard, waitTime, objPosition) => {
     let plrCardObject = objCard;
     plrCardObject.x = objPosition.startX;
     plrCardObject.y = objPosition.startY;
@@ -225,15 +493,27 @@ function drawCard(objCard, waitTime, objPosition) {
 
     plrBitmap.addEventListener('click', () => {
         removePlayerCard(plrBitmap);
-        playerHand(objPosition.cardPos, 600, 500);
+        if (typeof cardArr !== "undefined" && cardArr.length > 0) {
+            playerHand(objPosition.cardPos, 600, 500);
+            createjs.Sound.play(soundID, {delay: 500});
+        } else {
+            let txt = new createjs.Text();
+            txt.x = 400;
+            txt.y = 550;
+            txt.font = "bold 96px Indie Flower";
+            txt.color = "#000000";
+            txt.text = "Game Over!";
+            stage.addChild(txt);
+            txt.shadow = new createjs.Shadow("#000000", 5, 5, 10);
+        }
     }, false);
 
     createjs.Tween.get(plrBitmap, {override:true}).wait(waitTime).to({ x: objPosition.endX, y: objPosition.endY }, 200);
 
     return plrBitmap;
-}
+};
 
-function playerHand(whichCard, waitTimeCardA, waitTimeCardB) {
+playerHand = (whichCard, waitTimeCardA, waitTimeCardB) => {
     if (hitClicked && whichCard === 'both') {
         arrRemoved.forEach((el) => {
             removePlayerCard(el);
@@ -246,7 +526,7 @@ function playerHand(whichCard, waitTimeCardA, waitTimeCardB) {
         let x = cardRandomizer();
         plrHand.push(x[0]);
     }
-    
+
     let cardA = {};
     let cardB = {};
     if (whichCard === 'both') {
@@ -264,10 +544,10 @@ function playerHand(whichCard, waitTimeCardA, waitTimeCardB) {
     plrHand.length = 0;
 }
 
-function removePlayerCard(objCard) {
+removePlayerCard = (objCard) => {
     createjs.Tween.get(objCard).to({x: 20, y: 520, alpha:0, visible: false}, 200);
 }
 
-function cardRandomizer() {
+cardRandomizer = () => {
     return cardArr.splice(Math.floor(Math.random() * cardArr.length), 1);
 }
