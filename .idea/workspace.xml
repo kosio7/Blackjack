@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="38625b84-76d6-444f-bcde-0403078f029b" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/blackjack.js" afterPath="$PROJECT_DIR$/js/blackjack.js" />
-    </list>
+    <list default="true" id="38625b84-76d6-444f-bcde-0403078f029b" name="Default" comment="" />
     <ignored path="Blackjack.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -38,8 +36,8 @@
       <file leaf-file-name="blackjack.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/blackjack.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="347" column="57" selection-start-line="347" selection-start-column="57" selection-end-line="347" selection-end-column="57" />
+            <state relative-caret-position="85">
+              <caret line="5" column="21" selection-start-line="5" selection-start-column="21" selection-end-line="5" selection-end-column="21" />
               <folding>
                 <element signature="e#246#5240#0" expanded="false" />
                 <element signature="e#5354#5479#0" expanded="false" />
@@ -225,12 +223,12 @@
       <workItem from="1475859761207" duration="588000" />
       <workItem from="1475940251193" duration="1876000" />
       <workItem from="1476003000672" duration="14752000" />
-      <workItem from="1476020632494" duration="3983000" />
+      <workItem from="1476020632494" duration="4124000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="122225000" />
+    <option name="totallyTimeSpent" value="122366000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
@@ -832,8 +830,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/blackjack.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="347" column="57" selection-start-line="347" selection-start-column="57" selection-end-line="347" selection-end-column="57" />
+        <state relative-caret-position="85">
+          <caret line="5" column="21" selection-start-line="5" selection-start-column="21" selection-end-line="5" selection-end-column="21" />
           <folding>
             <element signature="e#246#5240#0" expanded="false" />
             <element signature="e#5354#5479#0" expanded="false" />
