@@ -3,81 +3,9 @@ let dlrHand = [];
 let plrHand = [];
 let arrRemoved = [];
 let hitClicked = false;
-let soundID = 'music';
-let init = () => {};
-let loadSound = () => {};
-let playSound = () => {};
-let tick = () => {};
-let deckDraw = () => {};
-let dealerHand = () => {};
-let drawCard = () => {};
-let playerHand = () => {};
-let removePlayerCard = () => {};
-let cardRandomizer = () => {};
-let resize = () => {};
+let soundID = 'draw';
 
-let hitButton = document.getElementById("hitButton");
-hitButton.addEventListener("click", () => {
-    hitClicked = true;
-    if (typeof cardArr !== "undefined" && cardArr.length > 0) {
-        playerHand('both', 500, 400);
-        createjs.Sound.play(soundID, {delay: 250});
-        createjs.Sound.play(soundID, {delay: 450});
-    } else {
-        let txt = new createjs.Text();
-        txt.x = 400;
-        txt.y = 550;
-        txt.font = "bold 96px Indie Flower";
-        txt.color = "#000000";
-        txt.text = "Game Over!";
-        stage.addChild(txt);
-        txt.shadow = new createjs.Shadow("#000000", 5, 5, 10);
-    }
-});
-
-window.addEventListener('resize', resize, false);
-
-init = () => {
-    stage = new createjs.Stage("screenView");
-    createjs.Ticker.addEventListener("tick", () => {
-        tick();
-    });
-
-    dealerHand();
-    playerHand("both", 2000, 2500);
-    deckDraw();
-
-    resize();
-
-    loadSound();
-};
-
-//The next 2 functions are for the card drawing sound using the SoundJS library.
-
-loadSound = () => {
-    createjs.Sound.addEventListener("fileload", playSound);
-    createjs.Sound.registerSound("sounds/draw.wav", soundID);
-};
-
-playSound = () => {
-    createjs.Sound.play(soundID, {delay: 150});
-    createjs.Sound.play(soundID, {delay: 800});
-    createjs.Sound.play(soundID, {delay: 1200});
-    createjs.Sound.play(soundID, {delay: 1700});
-    createjs.Sound.play(soundID, {delay: 2200});
-};
-
-tick = () => {
-    stage.update();
-};
-
-resize = () => {                          //This function can be used for scaling contents on different screen sizes.
-    stage.canvas.width = window.innerWidth;
-    stage.canvas.height = window.innerHeight;
-};
-
-//Deck images created by http://byronknoll.blogspot.bg/2011/03/vector-playing-cards.html
-
+//Contains all card objects. Deck images created by http://byronknoll.blogspot.bg/2011/03/vector-playing-cards.html
 let cardArr = [
     {
         image: "images/ace1.png",
@@ -393,7 +321,30 @@ let cardArr = [
     }
 ];
 
-deckDraw = () => {
+/**
+ * The next 2 functions are for the card draw sound using the SoundJS library.
+ */
+const loadSound = () => {
+    createjs.Sound.addEventListener("fileload", playSound);
+    createjs.Sound.registerSound("sounds/draw.wav", soundID);
+};
+
+const playSound = () => {
+    createjs.Sound.play(soundID, {delay: 150});
+    createjs.Sound.play(soundID, {delay: 800});
+    createjs.Sound.play(soundID, {delay: 1200});
+    createjs.Sound.play(soundID, {delay: 1700});
+    createjs.Sound.play(soundID, {delay: 2200});
+};
+
+const tick = () => {
+    stage.update();
+};
+
+/**
+ * This function draws the deck and the back of the deck.
+ */
+const deckDraw = () => {
     for (let i = 0; i <= cardArr.length - 1; i++) {
         let cards = new Image();
         cards.src = cardArr[i].image;
@@ -426,8 +377,7 @@ deckDraw = () => {
     bitmapC2.shadow = new createjs.Shadow("#000000", 5, 5, 10);
 };
 
-dealerHand = () => {
-
+const dealerHand = () => {
     for (let i = 0; i < 3; i++)
     {
         let x = cardRandomizer();
@@ -477,7 +427,13 @@ dealerHand = () => {
     createjs.Tween.get(bitmap3, {override:true}).wait(1500).to({x:600, y: 35}, 400);
 };
 
-drawCard = (objCard, waitTime, objPosition) => {
+/**
+ *This function draws the player's hand cards.
+ * @param objCard Specifies the exact card object from the array.
+ * @param waitTime Specifies the delay before card drawing.
+ * @param objPosition Specifies X and Y positions on the canvas where the card should be drawn.
+ */
+const drawCard = (objCard, waitTime, objPosition) => {
     let plrCardObject = objCard;
     plrCardObject.x = objPosition.startX;
     plrCardObject.y = objPosition.startY;
@@ -513,7 +469,13 @@ drawCard = (objCard, waitTime, objPosition) => {
     return plrBitmap;
 };
 
-playerHand = (whichCard, waitTimeCardA, waitTimeCardB) => {
+/**
+ *This function is for drawing specific card from the player's hand.
+ * @param whichCard Which card should be drawn. Both, left or right.
+ * @param waitTimeCardA The delay after which the card in position A will be drawn.
+ * @param waitTimeCardB The delay after which the card in position B will be drawn.
+ */
+const playerHand = (whichCard, waitTimeCardA, waitTimeCardB) => {
     if (hitClicked && whichCard === 'both') {
         arrRemoved.forEach((el) => {
             removePlayerCard(el);
@@ -542,12 +504,60 @@ playerHand = (whichCard, waitTimeCardA, waitTimeCardB) => {
     arrRemoved.push(cardB);
 
     plrHand.length = 0;
-}
+};
 
-removePlayerCard = (objCard) => {
+/**
+ * This function removes player's card to the designated coordinates using fade effect.
+ * @param objCard This parameter specifies which card from the players hand to be removed.
+ */
+const removePlayerCard = (objCard) => {
     createjs.Tween.get(objCard).to({x: 20, y: 520, alpha:0, visible: false}, 200);
-}
+};
 
-cardRandomizer = () => {
+/**
+ * This function cuts random object from the card array and returns it as an array.
+ */
+const cardRandomizer = () => {
     return cardArr.splice(Math.floor(Math.random() * cardArr.length), 1);
-}
+};
+
+/**
+ * This function can be used for scaling contents on different screen sizes.
+ */
+const resize = () => {
+    stage.canvas.width = window.innerWidth;
+    stage.canvas.height = window.innerHeight;
+};
+
+let hitButton = document.getElementById("hitButton");
+hitButton.addEventListener("click", () => {
+    hitClicked = true;
+    if (typeof cardArr !== "undefined" && cardArr.length > 0) {
+        playerHand('both', 500, 400);
+        createjs.Sound.play(soundID, {delay: 250});
+        createjs.Sound.play(soundID, {delay: 450});
+    } else {
+        let txt = new createjs.Text();
+        txt.x = 400;
+        txt.y = 550;
+        txt.font = "bold 96px Indie Flower";
+        txt.color = "#000000";
+        txt.text = "Game Over!";
+        stage.addChild(txt);
+        txt.shadow = new createjs.Shadow("#000000", 5, 5, 10);
+    }
+});
+
+window.addEventListener('resize', resize, false);
+
+let init = () => {
+    stage = new createjs.Stage("screenView");
+    createjs.Ticker.addEventListener("tick", () => {
+        tick();
+    });
+    dealerHand();
+    playerHand("both", 2000, 2500);
+    deckDraw();
+    resize();
+    loadSound();
+};
