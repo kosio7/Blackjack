@@ -2,6 +2,7 @@ let stage;
 let dlrHand = [];
 let plrHand = [];
 let arrRemoved = [];
+let button;
 let hitClicked = false;
 let soundID = 'draw';
 
@@ -402,7 +403,7 @@ const dealerHand = () => {
 
     bitmap1.shadow = new createjs.Shadow("#000000", 5, 5, 10);
 
-    createjs.Tween.get(bitmap1, {override:true}).wait(500).to({x:200, y: 35}, 600);
+    createjs.Tween.get(bitmap1, {override:true}).wait(500).to({x:200, y: 35}, 600, createjs.Ease.backOut);
 
     dlrHand[1].x = 800;
     dlrHand[1].y = 80;
@@ -416,7 +417,7 @@ const dealerHand = () => {
 
     bitmap2.shadow = new createjs.Shadow("#000000", 5, 5, 10);
 
-    createjs.Tween.get(bitmap2, {override:true}).wait(1000).to({x:400, y: 35}, 500);
+    createjs.Tween.get(bitmap2, {override:true}).wait(1000).to({x:400, y: 35}, 500, createjs.Ease.backOut);
 
     dlrHand[2].x = 800;
     dlrHand[2].y = 80;
@@ -430,7 +431,7 @@ const dealerHand = () => {
 
     bitmap3.shadow = new createjs.Shadow("#000000", 5, 5, 10);
 
-    createjs.Tween.get(bitmap3, {override:true}).wait(1500).to({x:600, y: 35}, 400);
+    createjs.Tween.get(bitmap3, {override:true}).wait(1500).to({x:600, y: 35}, 400, createjs.Ease.backOut);
 };
 
 /**
@@ -451,6 +452,9 @@ const drawCard = (objCard, waitTime, objPosition) => {
     plrBitmap.y = plrCardObject.y;
     stage.addChild(plrBitmap);
 
+    stage.enableMouseOver();
+    plrBitmap.cursor = "pointer";
+
     plrBitmap.shadow = new createjs.Shadow("#000000", 5, 5, 10);
 
     plrBitmap.addEventListener('click', () => {
@@ -470,7 +474,7 @@ const drawCard = (objCard, waitTime, objPosition) => {
         }
     }, false);
 
-    createjs.Tween.get(plrBitmap, {override:true}).wait(waitTime).to({ x: objPosition.endX, y: objPosition.endY }, 200);
+    createjs.Tween.get(plrBitmap, {override:true}).wait(waitTime).to({ x: objPosition.endX, y: objPosition.endY }, 200, createjs.Ease.backOut);
 
     return plrBitmap;
 };
@@ -514,7 +518,7 @@ const playerHand = (whichCard, waitTimeCardA, waitTimeCardB) => {
 
 /**
  * This function removes player's card to the designated coordinates using fade effect.
- * @param objCard This parameter specifies which card from the players hand to be removed.
+ * @param objCard This parameter specifies which card from the player's hand to be removed.
  */
 const removePlayerCard = (objCard) => {
     createjs.Tween.get(objCard).to({x: 20, y: 520, alpha:0, visible: false}, 200);
@@ -535,27 +539,41 @@ const resize = () => {
     stage.canvas.height = window.innerHeight;
 };
 
-let hitButton = document.getElementById("hitButton");
-// Listener for the hit button. When triggered it draws 2 new cards from the deck to the player's hand.
-hitButton.addEventListener("click", () => {
-    hitClicked = true;
-    if (typeof cardArr !== "undefined" && cardArr.length > 0) {
-        playerHand('both', 500, 400);
-        createjs.Sound.play(soundID, {delay: 250});
-        createjs.Sound.play(soundID, {delay: 450});
-    } else {
-        let txt = new createjs.Text();
-        txt.x = 400;
-        txt.y = 550;
-        txt.font = "bold 96px Indie Flower";
-        txt.color = "#000000";
-        txt.text = "Game Over!";
-        stage.addChild(txt);
-        txt.shadow = new createjs.Shadow("#000000", 5, 5, 10);
-    }
-});
+const hitButton = () => {
+    let rectangle = new createjs.Graphics().beginStroke("#000000").beginFill("#BF1111").drawRoundRect(0,0,80,50,5);
+    button = new createjs.Shape(rectangle);
+    button.x = 750;
+    button.y = 400;
+    stage.addChild(button);
+    button.shadow = new createjs.Shadow("#000000", 5, 5, 10);
 
-window.addEventListener('resize', resize, false);
+    let bText = new createjs.Text("Hit!", "bold 20px Times", "#000000");
+    bText.x = 775;
+    bText.y = 415;
+    stage.addChild(bText);
+
+    stage.enableMouseOver();
+    button.cursor = "pointer";
+
+    button.addEventListener("click", () => {
+        hitClicked = true;
+        if (typeof cardArr !== "undefined" && cardArr.length > 0) {
+            playerHand('both', 500, 400);
+            createjs.Sound.play(soundID, {delay: 250});
+            createjs.Sound.play(soundID, {delay: 450});
+        } else {
+            let txt = new createjs.Text();
+            txt.x = 400;
+            txt.y = 550;
+            txt.font = "bold 96px Indie Flower";
+            txt.color = "#000000";
+            txt.text = "Game Over!";
+            stage.addChild(txt);
+            txt.shadow = new createjs.Shadow("#000000", 5, 5, 10);
+        }
+    });
+};
+
 
 /**
  * This function is called on load. It is the main game function.
@@ -565,6 +583,7 @@ let init = () => {
     createjs.Ticker.addEventListener("tick", () => {
         tick();
     });
+    hitButton();
     dealerHand();
     playerHand("both", 2000, 2500);
     deckDraw();

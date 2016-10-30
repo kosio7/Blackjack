@@ -6,17 +6,19 @@ body, html {
 
 #screenView {
     background-color: #004C00;
+    width: 100%;
+    height: 100%;
 }
 
-#hitButton {
-    bottom: 25%;
-    left: 55%;
-    position: absolute;
-    width: 75px;
-    height: 75px;
-    font-weight: bold;
-    font-size: large;
-    border-radius: 5px;
-    box-shadow: 2px 2px 2px black;
-    cursor: pointer;
-}
+/*#hitButton {*/
+    /*bottom: 25%;*/
+    /*left: 55%;*/
+    /*position: absolute;*/
+    /*width: 75px;*/
+    /*height: 75px;*/
+    /*font-weight: bold;*/
+    /*font-size: large;*/
+    /*border-radius: 5px;*/
+    /*box-shadow: 2px 2px 2px black;*/
+    /*cursor: pointer;*/
+/*}*/
