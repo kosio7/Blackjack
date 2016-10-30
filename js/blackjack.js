@@ -569,7 +569,7 @@ const hitButton = () => {
             txt.color = "#000000";
             txt.text = "Game Over!";
             stage.addChild(txt);
-            txt.shadow = new createjs.Shadow("#000000", 5, 5, 10);
+            txt.shadow = new createjs.Shadow("#000000", 5, 5, 10);                 
         }
     });
 };

@@ -7,7 +7,7 @@ body, html {
 #screenView {
     background-color: #004C00;
     width: 100%;
-    height: 100%;
+    height: auto;
 }
 
 /*#hitButton {*/
