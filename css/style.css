@@ -4,21 +4,18 @@ body, html {
     overflow: hidden;
 }
 
-#screenView {
+#canvas {
     background-color: #004C00;
     width: 100%;
     height: auto;
 }
 
-/*#hitButton {*/
-    /*bottom: 25%;*/
-    /*left: 55%;*/
-    /*position: absolute;*/
-    /*width: 75px;*/
-    /*height: 75px;*/
-    /*font-weight: bold;*/
-    /*font-size: large;*/
-    /*border-radius: 5px;*/
-    /*box-shadow: 2px 2px 2px black;*/
-    /*cursor: pointer;*/
-/*}*/
+@font-face {
+    font-family: "Coffee";
+    src: url("CoffeeTinInitials.ttf");
+}
+
+@font-face {
+    font-family: "Hoyle";
+    src: url("HoylePLayingCards.ttf");
+}

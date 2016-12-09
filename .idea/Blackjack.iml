@@ -12,5 +12,8 @@
     <orderEntry type="library" name="preloadjs-DefinitelyTyped" level="application" />
     <orderEntry type="library" name="tweenjs-DefinitelyTyped" level="application" />
     <orderEntry type="library" name="soundjs-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="createjs-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="createjs-lib-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="tween.js-DefinitelyTyped" level="application" />
   </component>
 </module>

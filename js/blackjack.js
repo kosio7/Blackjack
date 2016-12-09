@@ -1,390 +1,159 @@
+/**
+ * This is a simple Blackjack card game without real rules. It is created with HTML canvas and the CreateJS suite.
+ *
+ * Rules: The cards from 2 to 10 have their respective face value as scoring value. The J, K, and Q are worth 10 points
+ * each, the Ace is worth 11 points. There is also one Joker in the deck.
+ * Scoring: If both cards in the player's hand are the same value, the value of both of the cards is added to the
+ * player's score. If the value of one the cards in the player's hand is equal to a value of a card in the dealer's hand,
+ * only the value of the player's hand card is added to the player's score. If the cards in the players's hand have a
+ * different value, but both have equal value with two of the dealers hand cards, both the player card 1 and the player
+ * card 2 values are added to the player's score. If the Joker appears in the player hand, the player loses 20 points
+ * if the joker is drawn in the dealer's hand, the player loses nothing but also has only two cards that can match in
+ * the dealer's deck. To win the game, the player must have at least 100 points score. To
+ * win the big jackpot the player must have at least 200 points, in that case the player's score will be multiplied by 2.
+ * When the HIT button is triggered two new cards are placed in the player's hand.
+ */
+
 let stage;
 let dlrHand = [];
 let plrHand = [];
 let arrRemoved = [];
-let button;
+let win = 0;
+let winTxt;
+let won;
+let back1, back2, back3, back4;
+let plrBitmap;
+let hitBtn;
+let bText;
 let hitClicked = false;
-let soundID = 'draw';
-
-// Contains all card objects. Deck images created by http://byronknoll.blogspot.bg/2011/03/vector-playing-cards.html
-let cardArr = [
-    {
-        image: "images/ace1.png",
-        id: "ace1",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/ace2.png",
-        id: "ace2",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/ace3.png",
-        id: "ace3",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/ace4.png",
-        id: "ace4",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/two1.png",
-        id: "two1",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/two2.png",
-        id: "two2",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/two3.png",
-        id: "two3",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/two4.png",
-        id: "two4",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/three1.png",
-        id: "three1",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/three2.png",
-        id: "three2",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/three3.png",
-        id: "three3",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/three4.png",
-        id: "three4",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/four1.png",
-        id: "four1",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/four2.png",
-        id: "four2",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/four3.png",
-        id: "four3",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/four4.png",
-        id: "four4",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/five1.png",
-        id: "five1",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/five2.png",
-        id: "five2",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/five3.png",
-        id: "five3",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/five4.png",
-        id: "five4",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/six1.png",
-        id: "six1",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/six2.png",
-        id: "six2",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/six3.png",
-        id: "six3",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/six4.png",
-        id: "six4",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/seven1.png",
-        id: "seven1",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/seven2.png",
-        id: "seven2",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/seven3.png",
-        id: "seven3",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/seven4.png",
-        id: "seven4",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/eight1.png",
-        id: "eight1",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/eight2.png",
-        id: "eight2",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/eight3.png",
-        id: "eight3",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/eight4.png",
-        id: "eight4",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/nine1.png",
-        id: "nine1",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/nine2.png",
-        id: "nine2",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/nine3.png",
-        id: "nine3",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/nine4.png",
-        id: "nine4",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/ten1.png",
-        id: "ten1",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/ten2.png",
-        id: "ten2",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/ten3.png",
-        id: "ten3",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/ten4.png",
-        id: "ten4",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/jack1.png",
-        id: "jack1",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/jack2.png",
-        id: "jack2",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/jack3.png",
-        id: "jack3",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/jack4.png",
-        id: "jack4",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/queen1.png",
-        id: "queen1",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/queen2.png",
-        id: "queen2",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/queen3.png",
-        id: "queen3",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/queen4.png",
-        id: "queen4",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/king1.png",
-        id: "king1",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/king2.png",
-        id: "king2",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/king3.png",
-        id: "king3",
-        x: 0,
-        y: 0
-    },
-    {
-        image: "images/king4.png",
-        id: "king4",
-        x: 0,
-        y: 0
-    }
-];
+let load;
 
 /**
- * The next 2 functions are for the card draw sound using the SoundJS library.
+ * The next function sets up the stage and preloads all assets before the game reveal screen using the PreloadJS library.
  */
-const loadSound = () => {
-    createjs.Sound.addEventListener("fileload", playSound);
-    createjs.Sound.registerSound("sounds/draw.wav", soundID);
-};
-
-const playSound = () => {
-    createjs.Sound.play(soundID, {delay: 150});
-    createjs.Sound.play(soundID, {delay: 800});
-    createjs.Sound.play(soundID, {delay: 1200});
-    createjs.Sound.play(soundID, {delay: 1700});
-    createjs.Sound.play(soundID, {delay: 2200});
+const preloadAssets = () => {
+    stage = new createjs.Stage("canvas");
+    createjs.Touch.enable(stage);
+    createjs.Ticker.addEventListener("tick", function() {
+        stage.update();
+    });
+    let queue = new createjs.LoadQueue();
+    createjs.Sound.initializeDefaultPlugins();
+    queue.installPlugin(createjs.Sound);
+    queue.addEventListener("progress", loading);
+    queue.addEventListener("complete", gameReveal);
+    queue.loadManifest(cardArr);
+    queue.loadManifest([
+        {src:"sounds/86854__milton__cardfall.wav", id: "draw"},
+        {src:"sounds/button.wav", id: "button"},
+        {src:"sounds/86866__milton__losev.wav", id: "lose"},
+        {src:"sounds/86880__milton__winnv.wav", id: "win"},
+        {src:"sounds/86860__milton__intro-game.wav", id: "intro"}
+    ]);
+    resize();
 };
 
 /**
- * This function is for automatically calling the stage update.
+ * This function draws loading text during the assets preload.
  */
-const tick = () => {
-    stage.update();
+const loading = () => {
+    stage.removeChild(load);
+    load = new createjs.Text("LOADING...", "100px Times", "#000000");
+    load.regX = load.getMeasuredWidth() / 2;
+    load.regY = load.getMeasuredHeight() / 2;
+    load.x = stage.canvas.width / 2;
+    load.y = stage.canvas.height / 2;
+    load.shadow = new createjs.Shadow("#000000", 5, 5, 10);
+    stage.addChild(load);
 };
 
 /**
- * This function draws the deck and the back of the deck.
+ * This function draws the bounds where the cards should go when dealt from the deck.
+ */
+const cardPlaces = () => {
+    let dlrPlace1, dlrPlace2, dlrPlace3, plrPlace1, plrPlace2;
+    let rect = new createjs.Graphics().beginLinearGradientFill(["#000000","#737373"], [0, 1], 100, 40, -10, 40).drawRoundRect(0,0,150,225,6);
+
+    dlrPlace1 = new createjs.Shape(rect);
+    dlrPlace1.x = 200;
+    dlrPlace1.y = 35;
+    dlrPlace1.alpha = .2;
+
+    dlrPlace2 = new createjs.Shape(rect);
+    dlrPlace2.x = 400;
+    dlrPlace2.y = 35;
+    dlrPlace2.alpha = .2;
+
+    dlrPlace3 = new createjs.Shape(rect);
+    dlrPlace3.x = 600;
+    dlrPlace3.y = 35;
+    dlrPlace3.alpha = .2;
+
+    plrPlace1 = new createjs.Shape(rect);
+    plrPlace1.x = 300;
+    plrPlace1.y = 300;
+    plrPlace1.alpha = .2;
+
+    plrPlace2 = new createjs.Shape(rect);
+    plrPlace2.x = 500;
+    plrPlace2.y = 300;
+    plrPlace2.alpha = .2;
+
+    stage.addChild(dlrPlace1, dlrPlace2, dlrPlace3, plrPlace1, plrPlace2);
+};
+
+/**
+ * This function draws the back of the deck.
  */
 const deckDraw = () => {
-    for (let i = 0; i <= cardArr.length - 1; i++) {
-        let cards = new Image();
-        cards.src = cardArr[i].image;
-        let bitmapC = new createjs.Bitmap(cards);
-        bitmapC.x = 800;
-        bitmapC.y = 80;
-        stage.addChild(bitmapC);
-    }
-    let cards = new Image();
+    let cards, cards1, cards2, cards3;
+
+    cards = new Image();
     cards.src = "images/back.png";
-    let bitmapC = new createjs.Bitmap(cards);
-    bitmapC.x = 800;
-    bitmapC.y = 80;
-    stage.addChild(bitmapC);
+    back1 = new createjs.Bitmap(cards);
+    back1.x = 800;
+    back1.y = 80;
 
-    let cards1 = new Image();
+    cards1 = new Image();
     cards1.src = "images/back.png";
-    let bitmapC1 = new createjs.Bitmap(cards1);
-    bitmapC1.x = 805;
-    bitmapC1.y = 80;
-    stage.addChild(bitmapC1);
+    back2 = new createjs.Bitmap(cards1);
+    back2.x = 805;
+    back2.y = 85;
 
-    let cards2 = new Image();
+    cards2 = new Image();
     cards2.src = "images/back.png";
-    let bitmapC2 = new createjs.Bitmap(cards2);
-    bitmapC2.x = 810;
-    bitmapC2.y = 80;
-    stage.addChild(bitmapC2);
+    back3 = new createjs.Bitmap(cards2);
+    back3.x = 810;
+    back3.y = 90;
 
-    bitmapC2.shadow = new createjs.Shadow("#000000", 5, 5, 10);
+    cards3 = new Image();
+    cards3.src = "images/back.png";
+    back4 = new createjs.Bitmap(cards3);
+    back4.x = 815;
+    back4.y = 95;
+
+    stage.addChild(back1, back2, back3, back4);
+    back3.shadow = new createjs.Shadow("#000000", 5, 5, 10);
+};
+
+/**
+ * This function removes the back of the deck.
+ */
+const deckRemove = () => {
+    if (cardArr.length === 4) {
+        stage.removeChild(back3, back4);
+    }
+    if (cardArr.length < 4) {
+        stage.removeChild(back1, back2);
+    }
 };
 
 /**
  * This function draws the first three cards which are in the dealer's hand.
  */
 const dealerHand = () => {
+    let card1, card2, card3, bitmap1, bitmap2, bitmap3;
+
     for (let i = 0; i < 3; i++)
     {
         let x = cardRandomizer();
@@ -394,44 +163,43 @@ const dealerHand = () => {
     dlrHand[0].x = 800;
     dlrHand[0].y = 80;
 
-    let card1 = new Image();
-    card1.src = dlrHand[0].image;
-    let bitmap1 = new createjs.Bitmap(card1);
+    card1 = new Image();
+    card1.src = dlrHand[0].src;
+    bitmap1 = new createjs.Bitmap(card1);
     bitmap1.x = dlrHand[0].x;
     bitmap1.y = dlrHand[0].y;
-    stage.addChild(bitmap1);
 
     bitmap1.shadow = new createjs.Shadow("#000000", 5, 5, 10);
-
-    createjs.Tween.get(bitmap1, {override:true}).wait(500).to({x:200, y: 35}, 600, createjs.Ease.backOut);
 
     dlrHand[1].x = 800;
     dlrHand[1].y = 80;
 
-    let card2 = new Image();
-    card2.src = dlrHand[1].image;
-    let bitmap2 = new createjs.Bitmap(card2);
+    card2 = new Image();
+    card2.src = dlrHand[1].src;
+    bitmap2 = new createjs.Bitmap(card2);
     bitmap2.x = dlrHand[1].x;
     bitmap2.y = dlrHand[1].y;
-    stage.addChild(bitmap2);
 
     bitmap2.shadow = new createjs.Shadow("#000000", 5, 5, 10);
-
-    createjs.Tween.get(bitmap2, {override:true}).wait(1000).to({x:400, y: 35}, 500, createjs.Ease.backOut);
 
     dlrHand[2].x = 800;
     dlrHand[2].y = 80;
 
-    let card3 = new Image();
-    card3.src = dlrHand[2].image;
-    let bitmap3 = new createjs.Bitmap(card3);
+    card3 = new Image();
+    card3.src = dlrHand[2].src;
+    bitmap3 = new createjs.Bitmap(card3);
     bitmap3.x = dlrHand[2].x;
     bitmap3.y = dlrHand[2].y;
-    stage.addChild(bitmap3);
 
     bitmap3.shadow = new createjs.Shadow("#000000", 5, 5, 10);
 
-    createjs.Tween.get(bitmap3, {override:true}).wait(1500).to({x:600, y: 35}, 400, createjs.Ease.backOut);
+    stage.addChild(bitmap1, bitmap2, bitmap3);
+    createjs.Tween.get(bitmap1, {override:false}).wait(500).to({x:200, y: 35}, 600, createjs.Ease.backOut);
+    createjs.Sound.play("draw", {delay:500});
+    createjs.Tween.get(bitmap2, {override:false}).wait(1000).to({x:400, y: 35}, 500, createjs.Ease.backOut);
+    createjs.Sound.play("draw", {delay:1000});
+    createjs.Tween.get(bitmap3, {override:false}).wait(1500).to({x:600, y: 35}, 400, createjs.Ease.backOut);
+    createjs.Sound.play("draw", {delay:1500});
 };
 
 /**
@@ -441,42 +209,58 @@ const dealerHand = () => {
  * @param objPosition Specifies X and Y positions on the canvas where the card should be drawn.
  */
 const drawCard = (objCard, waitTime, objPosition) => {
-    let plrCardObject = objCard;
-    plrCardObject.x = objPosition.startX;
-    plrCardObject.y = objPosition.startY;
+    if (typeof cardArr !== "undefined" && cardArr.length > 0) {
+        let plrCardObject, plrCard;
 
-    let plrCard = new Image();
-    plrCard.src = plrCardObject.image;
-    let plrBitmap = new createjs.Bitmap(plrCard);
-    plrBitmap.x = plrCardObject.x;
-    plrBitmap.y = plrCardObject.y;
-    stage.addChild(plrBitmap);
+        plrCardObject = objCard;
+        plrCardObject.x = objPosition.startX;
+        plrCardObject.y = objPosition.startY;
 
-    stage.enableMouseOver();
-    plrBitmap.cursor = "pointer";
+        plrCard = new Image();
+        plrCard.src = plrCardObject.src;
+        plrBitmap = new createjs.Bitmap(plrCard);
+        plrBitmap.x = plrCardObject.x;
+        plrBitmap.y = plrCardObject.y;
+        stage.addChild(plrBitmap);
 
-    plrBitmap.shadow = new createjs.Shadow("#000000", 5, 5, 10);
+        /**
+         * All the greyed out code in this function can be used for interactions with the player's hand cards.
+         * It is not used now because of the rules of the game.
+         */
 
-    plrBitmap.addEventListener('click', () => {
-        removePlayerCard(plrBitmap);
-        if (typeof cardArr !== "undefined" && cardArr.length > 0) {
-            playerHand(objPosition.cardPos, 600, 500);
-            createjs.Sound.play(soundID, {delay: 500});
-        } else {
-            let txt = new createjs.Text();
-            txt.x = 400;
-            txt.y = 550;
-            txt.font = "bold 96px Indie Flower";
-            txt.color = "#000000";
-            txt.text = "Game Over!";
-            stage.addChild(txt);
-            txt.shadow = new createjs.Shadow("#000000", 5, 5, 10);
-        }
-    }, false);
+        // stage.enableMouseOver();
+        // plrBitmap.cursor = "pointer";
 
-    createjs.Tween.get(plrBitmap, {override:true}).wait(waitTime).to({ x: objPosition.endX, y: objPosition.endY }, 200, createjs.Ease.backOut);
+        plrBitmap.shadow = new createjs.Shadow("#000000", 5, 5, 10);
 
-    return plrBitmap;
+        // plrBitmap.addEventListener('click', () => {
+        //     deckRemove();
+        //     removePlayerCard(plrBitmap);
+        //     if (typeof cardArr !== "undefined" && cardArr.length > 0) {
+        //         playerHand(objPosition.cardPos, 600, 500);
+        //         createjs.Sound.play("draw", {delay: 500});
+        //       }
+        // }, false);
+
+        createjs.Tween.get(plrBitmap, {override: true}).wait(waitTime).to({
+            x: objPosition.endX,
+            y: objPosition.endY
+        }, 200, createjs.Ease.backInOut);
+
+        // plrBitmap.addEventListener("mouseover", () => {
+        //     plrBitmap.x = objPosition.endX - 15;
+        //     plrBitmap.y = objPosition.endY - 15;
+        //     plrBitmap.shadow = new createjs.Shadow("#000000", 7, 7, 40);
+        // });
+        // plrBitmap.addEventListener("mouseout", () => {
+        //     plrBitmap.x = objPosition.endX;
+        //     plrBitmap.y = objPosition.endY;
+        //     plrBitmap.shadow = new createjs.Shadow("#000000", 5, 5, 10);
+        // });
+        return plrBitmap;
+    } else {
+        createjs.Tween.get(this).wait(1500).call(gameOver);
+    }
 };
 
 /**
@@ -510,6 +294,11 @@ const playerHand = (whichCard, waitTimeCardA, waitTimeCardB) => {
         cardA = drawCard(plrHand[0], waitTimeCardA, { startX: 800, startY: 80, endX: 500, endY: 300, cardPos: 'right' });
     }
 
+    if (typeof cardArr !== "undefined" && cardArr.length > 0) {
+        calcWin();
+        showCurrentWin();
+    }
+
     arrRemoved.push(cardA);
     arrRemoved.push(cardB);
 
@@ -521,7 +310,7 @@ const playerHand = (whichCard, waitTimeCardA, waitTimeCardB) => {
  * @param objCard This parameter specifies which card from the player's hand to be removed.
  */
 const removePlayerCard = (objCard) => {
-    createjs.Tween.get(objCard).to({x: 20, y: 520, alpha:0, visible: false}, 200);
+    createjs.Tween.get(objCard).to({x: 20, y: 520, alpha:0, visible: false}, 500, createjs.Ease.backInOut);
 };
 
 /**
@@ -532,6 +321,120 @@ const cardRandomizer = () => {
 };
 
 /**
+ * This function shows the win from the current hand.
+ */
+const showCurrentWin = () => {
+        stage.removeChild(won);
+
+    if (plrHand[0].value === plrHand[1].value) {
+        won = new createjs.Text("You won: " + (parseInt(plrHand[0].value) + parseInt(plrHand[1].value)), "20px Times", "#000000");
+        won.x = -100;
+        won.y = 80;
+        won.shadow = new createjs.Shadow("#000000", 5, 5, 10);
+        createjs.Tween.get(won)
+            .to({alpha:0}, 2000)
+            .to({x:50, y:80}, 300, createjs.Ease.backOut).wait(500)
+            .to({x:50, y: -50}, 3000, createjs.Ease.backOut);
+        stage.addChild(won);
+    } else if (plrHand[0].value === dlrHand[0].value || plrHand[0].value === dlrHand[1].value || plrHand[0].value === dlrHand[2].value) {
+        won = new createjs.Text("You won: " + plrHand[0].value, "20px Times", "#000000");
+        won.x = -100;
+        won.y = 80;
+        won.shadow = new createjs.Shadow("#000000", 5, 5, 10);
+        createjs.Tween.get(won)
+            .to({alpha:0}, 2000)
+            .to({x:50, y:80}, 300, createjs.Ease.backOut).wait(500)
+            .to({x:50, y: -50}, 3000, createjs.Ease.backOut);
+        stage.addChild(won);
+    }
+
+     if (plrHand[1].value === dlrHand[0].value && plrHand[1].value !== plrHand[0].value) {
+         setTimeout(() => {
+             won = new createjs.Text("You won: " + dlrHand[0].value, "20px Times", "#000000");
+             won.x = -100;
+             won.y = 80;
+             won.shadow = new createjs.Shadow("#000000", 5, 5, 10);
+             createjs.Tween.get(won)
+                 .to({alpha:0}, 2000)
+                 .to({x:50, y:80}, 300, createjs.Ease.backOut).wait(1100)
+                 .to({x:50, y: -50}, 3000, createjs.Ease.backOut);
+             stage.addChild(won);
+         }, 800);
+
+    } else if (plrHand[1].value === dlrHand[1].value && plrHand[1].value !== plrHand[0].value) {
+         setTimeout(() => {
+             won = new createjs.Text("You won: " + dlrHand[1].value, "20px Times", "#000000");
+             won.x = -100;
+             won.y = 80;
+             won.shadow = new createjs.Shadow("#000000", 5, 5, 10);
+             createjs.Tween.get(won)
+                 .to({alpha:0}, 2000)
+                 .to({x:50, y:80}, 300, createjs.Ease.backOut).wait(1100)
+                 .to({x:50, y: -100}, 3000, createjs.Ease.backOut);
+             stage.addChild(won);
+         }, 800);
+    } else if (plrHand[1].value === dlrHand[2].value && plrHand[1].value !== plrHand[0].value) {
+         setTimeout(() => {
+             won = new createjs.Text("You won: " + dlrHand[2].value, "20px Times", "#000000");
+             won.x = -100;
+             won.y = 80;
+             won.shadow = new createjs.Shadow("#000000", 5, 5, 10);
+             createjs.Tween.get(won)
+                 .to({alpha:0}, 2000)
+                 .to({x:50, y:80}, 300, createjs.Ease.backOut).wait(1100)
+                 .to({x:50, y: -100}, 3000, createjs.Ease.backOut);
+             stage.addChild(won);
+         }, 800);
+    }
+
+    if (plrHand[0].value === "-20" || plrHand[1].value === "-20") {
+        setTimeout(() => {
+            won = new createjs.Text("You lost: 20", "20px Times", "#000000");
+            won.x = -100;
+            won.y = 80;
+            won.shadow = new createjs.Shadow("#000000", 5, 5, 10);
+            createjs.Tween.get(won)
+                .to({alpha:0}, 2000)
+                .to({x:50, y:80}, 300, createjs.Ease.backOut).wait(1100)
+                .to({x:50, y: -100}, 3000, createjs.Ease.backOut);
+            stage.addChild(won);
+        }, 500);
+    }
+
+};
+
+/**
+ * This function calculates the winnings and displays total won during the current game.
+ */
+const calcWin = () => {
+    stage.removeChild(winTxt);
+
+    winTxt = new createjs.Text("Win: " + win, "30px Times", "#000000");
+    winTxt.x = 50;
+    winTxt.y = 50;
+    winTxt.shadow = new createjs.Shadow("#000000", 5, 5, 10);
+    stage.addChild(winTxt);
+
+    if (plrHand[0].value !== plrHand[1].value) {
+        if (plrHand[0].value === dlrHand[0].value || plrHand[0].value === dlrHand[1].value ||
+            plrHand[0].value === dlrHand[2].value) {
+            win += parseInt(plrHand[0].value);
+        }
+
+        if (plrHand[1].value === dlrHand[0].value || plrHand[1].value === dlrHand[1].value ||
+            plrHand[1].value === dlrHand[2].value) {
+            win += parseInt(plrHand[1].value);
+        }
+    }  else {
+        win += parseInt(plrHand[0].value) * 2;
+    }
+
+    if (plrHand[0].value === "-20" || plrHand[1].value === "-20") {
+        win += -20;
+    }
+};
+
+/**
  * This function can be used for scaling contents on different screen sizes.
  */
 const resize = () => {
@@ -539,54 +442,106 @@ const resize = () => {
     stage.canvas.height = window.innerHeight;
 };
 
+/**
+ * The next function is for the game HIT button. When triggered it removes the cards from the player's hand and draws new ones from the deck.
+ */
 const hitButton = () => {
-    let rectangle = new createjs.Graphics().beginStroke("#000000").beginFill("#BF1111").drawRoundRect(0,0,80,50,5);
-    button = new createjs.Shape(rectangle);
-    button.x = 750;
-    button.y = 400;
-    stage.addChild(button);
-    button.shadow = new createjs.Shadow("#000000", 5, 5, 10);
+    let circle = new createjs.Graphics().beginStroke("#000000").beginRadialGradientFill(["#FF1111", "#35CC21"], [.3, 1], 0, 0, 0, 0, 0, 50).drawCircle(0,0,50);
+    hitBtn = new createjs.Shape(circle);
+    hitBtn.regX = 25;
+    hitBtn.regY = 25;
+    hitBtn.x = 850;
+    hitBtn.y = 450;
+    hitBtn.alpha = 0;
+    createjs.Tween.get(hitBtn).to({alpha:1}, 800);
+    stage.addChild(hitBtn);
+    hitBtn.shadow = new createjs.Shadow("#000000", 0, 0, 40);
 
-    let bText = new createjs.Text("Hit!", "bold 20px Times", "#000000");
-    bText.x = 775;
-    bText.y = 415;
+    bText = new createjs.Text("HIT", "25px Coffee", "#000000");
+    bText.regX = bText.getMeasuredWidth() / 2;
+    bText.regY = bText.getMeasuredHeight() / 2;
+    bText.x = 825;
+    bText.y = 425;
+    bText.alpha = 0;
+    createjs.Tween.get(bText).to({alpha:1}, 2000);
     stage.addChild(bText);
 
-    stage.enableMouseOver();
-    button.cursor = "pointer";
+    let playTxt = new createjs.Text("Touch or click the HIT button \n or press Spacebar.", "20px Times", "#000000");
+    playTxt.textAlign = "center";
+    playTxt.x = 150;
+    playTxt.y = 400;
+    playTxt.shadow = new createjs.Shadow("#000000", 0, 0, 10);
+    stage.addChild(playTxt);
 
-    button.addEventListener("click", () => {
+    stage.enableMouseOver();
+    hitBtn.cursor = "pointer";
+
+    document.addEventListener("keydown", keyboardHit);
+    hitBtn.addEventListener("click", () => {
+        deckRemove();
         hitClicked = true;
         if (typeof cardArr !== "undefined" && cardArr.length > 0) {
-            playerHand('both', 500, 400);
-            createjs.Sound.play(soundID, {delay: 250});
-            createjs.Sound.play(soundID, {delay: 450});
-        } else {
-            let txt = new createjs.Text();
-            txt.x = 400;
-            txt.y = 550;
-            txt.font = "bold 96px Indie Flower";
-            txt.color = "#000000";
-            txt.text = "Game Over!";
-            stage.addChild(txt);
-            txt.shadow = new createjs.Shadow("#000000", 5, 5, 10);                 
+            hitBtn.mouseEnabled = false;
+            document.removeEventListener("keydown", keyboardHit);
+            hitBtn.graphics.clear().beginFill("#BF1111").drawCircle(0, 0, 50);
+            createjs.Tween.get(hitBtn).to({alpha: .5}, 100);
+            playerHand('both', 600, 500);
+            setTimeout(() => {
+                hitBtn.graphics.clear().beginRadialGradientFill(["#FF1111", "#35CC21"], [.3, 1], 0, 0, 0, 0, 0, 50).drawCircle(0, 0, 50);
+                createjs.Tween.get(hitBtn).to({alpha: 1}, 100);
+                document.addEventListener("keydown", keyboardHit);
+                hitBtn.mouseEnabled = true;
+                hitBtn.cursor = "pointer";
+            }, 750);
+            if (typeof cardArr !== "undefined" && cardArr.length >= 1) {
+                createjs.Sound.play("draw", {delay: 500});
+                createjs.Sound.play("draw", {delay: 600});
+                createjs.Sound.play("button");
+            }
         }
     });
 };
 
+/**
+ * This function triggers the HIT button by keyboard input.
+ */
+const keyboardHit = (e) => {
+    if (e.keyCode == "32") {
+        deckRemove();
+        hitClicked = true;
+        if (typeof cardArr !== "undefined" && cardArr.length > 0) {
+            hitBtn.mouseEnabled = false;
+            document.removeEventListener("keydown", keyboardHit);
+            hitBtn.graphics.clear().beginFill("#BF1111").drawCircle(0, 0, 50);
+            createjs.Tween.get(hitBtn).to({alpha: .5}, 100);
+            playerHand('both', 600, 500);
+            setTimeout(() => {
+                hitBtn.graphics.clear().beginRadialGradientFill(["#FF1111", "#35CC21"], [.3, 1], 0, 0, 0, 0, 0, 50).drawCircle(0, 0, 50);
+                createjs.Tween.get(hitBtn).to({alpha: 1}, 100);
+                hitBtn.mouseEnabled = true;
+                document.addEventListener("keydown", keyboardHit);
+                hitBtn.cursor = "pointer";
+            }, 750);
+            if (typeof cardArr !== "undefined" && cardArr.length >= 1) {
+                createjs.Sound.play("draw", {delay: 500});
+                createjs.Sound.play("draw", {delay: 600});
+                createjs.Sound.play("button");
+            }
+        }
+    }
+};
 
 /**
- * This function is called on load. It is the main game function.
+ * This function initializes the gameplay. It is the main game function.
  */
 let init = () => {
-    stage = new createjs.Stage("screenView");
-    createjs.Ticker.addEventListener("tick", () => {
-        tick();
-    });
-    hitButton();
+    win = 0;
+    cardPlaces();
+    createjs.Tween.get(this).wait(2500).call(hitButton);
     dealerHand();
     playerHand("both", 2000, 2500);
+    createjs.Sound.play("draw", {delay: 2000});
+    createjs.Sound.play("draw", {delay: 2500});
     deckDraw();
     resize();
-    loadSound();
 };

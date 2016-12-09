@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
-    <file url="PROJECT" libraries="{easeljs-DefinitelyTyped, preloadjs-DefinitelyTyped, soundjs-DefinitelyTyped, tweenjs-DefinitelyTyped}" />
+    <file url="PROJECT" libraries="{createjs-DefinitelyTyped, createjs-lib-DefinitelyTyped, easeljs-DefinitelyTyped, preloadjs-DefinitelyTyped, soundjs-DefinitelyTyped, tween.js-DefinitelyTyped, tweenjs-DefinitelyTyped}" />
     <includedPredefinedLibrary name="ECMAScript 6" />
   </component>
 </project>
